@@ -1,0 +1,29 @@
+name: Terraform
+
+on:
+  pull_request:
+    branches: ['dev', 'staging', 'main']
+  push:
+    branches: ['main']
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+      - name: Select Workspace
+        run: |
+          terraform workspace select "${{ github.ref_name }}" || terraform workspace new "${{ github.ref_name }}"
+      - name: Init
+        run: terraform init -input=false
+      - name: Fmt & Validate
+        run: |
+          terraform fmt -check
+          terraform validate
+      - name: Plan
+        run: terraform plan -out=tfplan -input=false
+      - name: Apply
+        if: github.ref == 'refs/heads/main'
+        run: terraform apply -auto-approve tfplan
