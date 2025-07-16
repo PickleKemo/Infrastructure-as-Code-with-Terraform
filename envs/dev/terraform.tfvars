@@ -14,3 +14,6 @@ node_group_name = "dev-nodes"
 node_instance_type = "t3.medium"
 subnet_ids = ["subnet-12345678", "subnet-87654321"]
 bucket_name = "dev-bucket"
+cloudtrail_s3_bucket = "dev-logs-bucket"
+alarm_definitions = []
+ops_sns_topic_arn = ""

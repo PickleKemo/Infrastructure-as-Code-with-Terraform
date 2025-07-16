@@ -11,7 +11,7 @@ module "compute" {
   env           = var.env
   ami_id        = var.ami_id
   instance_type = var.instance_type
-  subnet_ids    = var.subnet_cidrs
+  subnet_ids    = var.subnet_ids
 }
 
 module "database" {
@@ -35,11 +35,13 @@ module "eks" {
 }
 
 module "security" {
-  source = "../../modules/security"
-  env    = var.env
+  source                = "../../modules/security"
+  env                   = var.env
+  cloudtrail_s3_bucket  = var.cloudtrail_s3_bucket
 }
 
 module "monitoring" {
   source            = "../../modules/monitoring"
   alarm_definitions = var.alarm_definitions
+  ops_sns_topic_arn = var.ops_sns_topic_arn
 }
